@@ -1,0 +1,24 @@
+{
+  "name": "amqp-event-handler-test",
+  "event": "amqp:amqptest:new-user-queue",
+  "condition": "true",
+  "actions": [
+    {
+      "action": "start_workflow",
+      "start_workflow": {
+        "name": "user_onboarding_journey",
+        "version": 1,
+        "correlationId": "",
+        "input": {
+          "payload": "${$}"
+        },
+        "taskToDomain": {},
+        "priority": 0,
+        "idempotencyKey": ""
+      },
+      "expandInlineJSON": false
+    }
+  ],
+  "active": true,
+  "evaluatorType": "javascript"
+}

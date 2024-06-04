@@ -1,0 +1,57 @@
+@startuml
+!include https://raw.githubusercontent.com/patrik-csak/one-dark-plantuml-theme/v1.0.1/theme.puml
+!define SPRITESURL https://raw.githubusercontent.com/rabelenda/cicon-plantuml-sprites/v1.0/sprites
+!includeurl SPRITESURL/java.puml
+
+skinparam Linetype ortho
+'skinparam monochrome true
+skinparam classFontName "Helvetica"
+skinparam SequenceMessageAlign first
+skinparam BoxPadding 40
+skinparam Padding 4
+autonumber
+
+participant "Conductor" as conductor
+
+box Message Broker
+    queue "new-user-queue" as new_user_q
+    queue "notification-queue" as message_q
+end box
+
+box Existing Apps and Services
+    participant "Web App" as web_app
+    participant "Notification Service" as notification_service
+end box
+
+box Workers
+    participant "Approval Worker" as approval_worker
+end box
+
+
+== Consuming and Publishing XML to Queues with Conductor ==
+note over conductor
+An event handler is configured to listen
+for messages in "new-user-queue"
+and start an onboarding workflow.
+end note
+conductor -> new_user_q: GetMessages()
+activate conductor
+note over web_app
+A web web_app puts data into
+the queue.
+
+Data format is XML.
+end note
+web_app -> new_user_q: <user><name>John Doe</name>...</user>
+new_user_q -> conductor: <user><name>John Doe</name>...</user>
+conductor --> conductor: start onboarding workflow
+conductor --> conductor: Approval Task
+approval_worker --> conductor: Poll For Work
+conductor -> approval_worker: {"workflowInstanceId": "123...", "taskId": "123...", "data": { "xml": "<user><name>John Doe</name>...</user>"}}
+approval_worker -> conductor: {"status" : "COMPLETED", "data" : {"xmlMessage": "<message><email>john@test.com</email> ...</message>"}}
+conductor --> conductor: Use Event Task to publish message
+conductor -> message_q: <message><email>john@test.com</email> ...</message>
+conductor -> conductor: Workflow Completed
+notification_service -> message_q: GetMessages()
+notification_service --> "MailGun API": Send Message an external System
+@enduml

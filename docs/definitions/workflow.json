@@ -1,0 +1,112 @@
+{
+  "name": "user_onboarding_journey",
+  "description": "When a new user subscribes to the Duff Experience this onboarding workflow is triggered",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "wait_0",
+      "taskReferenceName": "wait_0_ref",
+      "inputParameters": {},
+      "type": "WAIT",
+      "decisionCases": {},
+      "defaultCase": [],
+      "forkTasks": [],
+      "startDelay": 0,
+      "joinOn": [],
+      "optional": false,
+      "defaultExclusiveJoinTask": [],
+      "asyncComplete": false,
+      "loopOver": [],
+      "onStateChange": {}
+    },
+    {
+      "name": "approval_task",
+      "taskReferenceName": "approval_ref",
+      "inputParameters": {
+        "data": "${workflow.input.payload.__payload}"
+      },
+      "type": "SIMPLE",
+      "decisionCases": {},
+      "defaultCase": [],
+      "forkTasks": [],
+      "startDelay": 0,
+      "joinOn": [],
+      "optional": false,
+      "defaultExclusiveJoinTask": [],
+      "asyncComplete": false,
+      "loopOver": [],
+      "onStateChange": {}
+    },
+    {
+      "name": "switch",
+      "taskReferenceName": "switch_ref",
+      "inputParameters": {
+        "switchCaseValue": "${approval_ref.output.result}"
+      },
+      "type": "SWITCH",
+      "decisionCases": {
+        "approved": []
+      },
+      "defaultCase": [
+        {
+          "name": "terminate",
+          "taskReferenceName": "terminate_ref",
+          "inputParameters": {
+            "terminationStatus": "FAILED",
+            "terminationReason": "Not Approved"
+          },
+          "type": "TERMINATE",
+          "decisionCases": {},
+          "defaultCase": [],
+          "forkTasks": [],
+          "startDelay": 0,
+          "joinOn": [],
+          "optional": false,
+          "defaultExclusiveJoinTask": [],
+          "asyncComplete": false,
+          "loopOver": [],
+          "onStateChange": {}
+        }
+      ],
+      "forkTasks": [],
+      "startDelay": 0,
+      "joinOn": [],
+      "optional": false,
+      "defaultExclusiveJoinTask": [],
+      "asyncComplete": false,
+      "loopOver": [],
+      "evaluatorType": "value-param",
+      "expression": "switchCaseValue",
+      "onStateChange": {}
+    },
+    {
+      "name": "event",
+      "taskReferenceName": "event_ref",
+      "inputParameters": {
+        "__payload": "${approval_ref.output.notification}"
+      },
+      "type": "EVENT",
+      "decisionCases": {},
+      "defaultCase": [],
+      "forkTasks": [],
+      "startDelay": 0,
+      "joinOn": [],
+      "sink": "amqp:amqptest:notification-queue",
+      "optional": false,
+      "defaultExclusiveJoinTask": [],
+      "asyncComplete": false,
+      "loopOver": [],
+      "onStateChange": {}
+    }
+  ],
+  "inputParameters": [],
+  "outputParameters": {},
+  "failureWorkflow": "",
+  "schemaVersion": 2,
+  "restartable": true,
+  "workflowStatusListenerEnabled": false,
+  "timeoutPolicy": "ALERT_ONLY",
+  "timeoutSeconds": 0,
+  "variables": {},
+  "inputTemplate": {}
+}
