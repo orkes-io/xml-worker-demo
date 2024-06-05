@@ -7,11 +7,8 @@
       "action": "start_workflow",
       "start_workflow": {
         "name": "user_onboarding_journey",
-        "version": 1,
+        "version": 2,
         "correlationId": "",
-        "input": {
-          "payload": "${$}"
-        },
         "taskToDomain": {},
         "priority": 0,
         "idempotencyKey": ""
