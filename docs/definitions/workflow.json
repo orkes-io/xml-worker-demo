@@ -1,7 +1,7 @@
 {
   "name": "user_onboarding_journey",
-  "description": "When a new user subscribes to the Duff Experience this onboarding workflow is triggered",
-  "version": 1,
+  "description": "When a new user subscribes to the Duff Experience we trigger the onboarding flow",
+  "version": 2,
   "tasks": [
     {
       "name": "wait_0",
@@ -23,7 +23,7 @@
       "name": "approval_task",
       "taskReferenceName": "approval_ref",
       "inputParameters": {
-        "data": "${workflow.input.payload.__payload}"
+        "data": "${workflow.input['conductor.event.eventPayload'].message}"
       },
       "type": "SIMPLE",
       "decisionCases": {},
