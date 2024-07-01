@@ -10,12 +10,21 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    def conductorVersion = "3.13.8"
-    def conductorClientVersion = "2.0.7"
-    def log4jVersion = "2.17.2!!"
-    def jacksonVersion = "2.13.2!!"
+ext {
+    conductorVersion = '3.13.8'
+    conductorClientVersion = '2.0.7'
+    log4jVersion = '2.17.2!!'
+    jacksonVersion = '2.13.2!!'
+    lombokVersion = '1.18.28'
+    junitVersion = '5.8.1'
+}
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+dependencies {
     implementation "com.netflix.conductor:conductor-client:${conductorVersion}"
     implementation "com.netflix.conductor:conductor-common:${conductorVersion}"
     implementation "io.orkes.conductor:orkes-conductor-client:${conductorClientVersion}"
@@ -33,11 +42,11 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
 
-    compileOnly 'org.projectlombok:lombok:1.18.28'
-    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${lombokVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${lombokVersion}"
 }
 
 test {
