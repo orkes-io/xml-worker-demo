@@ -7,12 +7,12 @@ group 'io.orkes.conductor.workers'
 version '1.0-SNAPSHOT'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 ext {
-    conductorVersion = '3.13.8'
-    conductorClientVersion = '2.0.7'
+    conductorClientVersion = '3.0.0-alpha3'
     log4jVersion = '2.17.2!!'
     jacksonVersion = '2.13.2!!'
     lombokVersion = '1.18.28'
@@ -25,19 +25,14 @@ java {
 }
 
 dependencies {
-    implementation "com.netflix.conductor:conductor-client:${conductorVersion}"
-    implementation "com.netflix.conductor:conductor-common:${conductorVersion}"
-    implementation "io.orkes.conductor:orkes-conductor-client:${conductorClientVersion}"
+    implementation "io.orkes.conductor:client:${conductorClientVersion}"
 
     implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
-    implementation "org.apache.logging.log4j:log4j-jul:${log4jVersion}"
-    implementation "org.apache.logging.log4j:log4j-web:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
 
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
     implementation "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${jacksonVersion}"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
@@ -51,12 +46,6 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-configurations {
-    all {
-        exclude group: 'com.github.vmg.protogen', module: 'protogen-annotations'
-    }
 }
 
 application {
